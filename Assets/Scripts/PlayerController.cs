@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     // PRIVATE VARIABLES
     private Rigidbody2D rBody;
     private bool isGrounded = false;
+    private bool isFacingRight = true;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,16 @@ public class PlayerController : MonoBehaviour
         }
 
         rBody.velocity = new Vector2(horiz * speed, rBody.velocity.y);
+
+        // Check direction of the player
+        if(horiz < 0 && isFacingRight)
+        {
+            Flip();
+        }
+        else if(horiz > 0 && !isFacingRight)
+        {
+            Flip();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -42,5 +53,14 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+    }
+
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+
+        Vector2 temp = transform.localScale;
+        temp.x *= -1;
+        transform.localScale = temp;
     }
 }
