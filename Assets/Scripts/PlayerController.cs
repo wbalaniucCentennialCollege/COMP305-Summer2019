@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     // PRIVATE VARIABLES
     private Rigidbody2D rBody;
+    private Animator anim;
     private bool isGrounded = false;
     private bool isFacingRight = true;
 
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Fixed update is called once per frame
@@ -45,6 +47,11 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
+        // Update Animator Information
+        anim.SetFloat("xSpeed", Mathf.Abs(horiz));
+        anim.SetFloat("ySpeed", rBody.velocity.y);
+        anim.SetBool("isGrounded", isGrounded);
     }
 
     void OnCollisionEnter2D(Collision2D other)
