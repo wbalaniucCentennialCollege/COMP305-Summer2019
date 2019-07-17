@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,16 +10,21 @@ public class PlayerController : MonoBehaviour
     private float speed = 10.0f;
     [SerializeField]
     private float jumpForce = 750.0f;
+    [SerializeField]
+    private LayerMask rayCastLM;
 
     // PRIVATE VARIABLES
     private Rigidbody2D rBody;
     private Animator anim;
     private bool isGrounded = false;
     private bool isFacingRight = true;
+    private Vector2 rayCastOrigin;
+    private bool isDead;
 
     // Start is called before the first frame update
     void Start()
     {
+        //isDead = false;
         rBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
@@ -29,6 +35,8 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 movement = Vector2.zero;
         float horiz = Input.GetAxis("Horizontal");
+
+        // CheckIfGround();
 
         if(isGrounded && Input.GetAxis("Jump") > 0)
         {
@@ -54,6 +62,25 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
     }
 
+    /*
+    private void CheckIfGround()
+    {
+        
+        rayCastOrigin = new Vector2(transform.position.x, transform.position.y - GetComponent<SpriteRenderer>().sprite.bounds.size.y);
+        RaycastHit2D hit = Physics2D.Raycast(rayCastOrigin, Vector2.down, 0.1f, rayCastLM);
+        
+
+        RaycastHit2D hit = Physics2D.CircleCast(transform.GetChild(0).transform.position, 0.1f, Vector2.down, 0.1f, rayCastLM);
+
+        if(hit)
+        {
+            isGrounded = true;
+            // Invoke("ResetGround", 0.1f);
+            Debug.Log("I hit the ground");
+        }
+    }
+    */
+
     void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.CompareTag("Ground"))
@@ -69,5 +96,17 @@ public class PlayerController : MonoBehaviour
         Vector2 temp = transform.localScale;
         temp.x *= -1;
         transform.localScale = temp;
+    }
+    
+    public void Death()
+    {
+        isDead = true;
+        anim.SetBool("isDead", true);
+    }
+    
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
