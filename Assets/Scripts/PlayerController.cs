@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     // PRIVATE VARIABLES
     private Rigidbody2D rBody;
     private Animator anim;
+    private AudioSource aSrc;
     private bool isGrounded = false;
     private bool isFacingRight = true;
     private Vector2 rayCastOrigin;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
         //isDead = false;
         rBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        aSrc = GetComponent<AudioSource>();
     }
 
     // Fixed update is called once per frame
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
         if(isGrounded && Input.GetAxis("Jump") > 0)
         {
+            aSrc.Play();
             rBody.AddForce(new Vector2(0.0f, jumpForce));
             isGrounded = false;
         }
