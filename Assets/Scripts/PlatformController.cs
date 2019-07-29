@@ -33,7 +33,7 @@ public class PlatformController : MonoBehaviour
 
         if(transform.position == waypoints[waypointIndexNext].position)
         {
-            Debug.Log("Reached destination");
+            // Debug.Log("Reached destination");
 
             startTime = Time.time;
 
